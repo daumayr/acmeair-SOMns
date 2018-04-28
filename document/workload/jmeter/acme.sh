@@ -34,13 +34,15 @@ do
   echo "# Preparing Database..."
   curl -X GET $LOAD_URL
 
+  silentCountDown 5
+
   kill -9 $pid
 
   #wait for server to start
   silentCountDown 5
 
   echo "# Starting Acme-Air"
-  $SOMNS_EXEC -at -JXmx5g ./../../../app.ns >> AT_$i.log &
+  $SOMNS_EXEC -at -JXmx5g ./../../../app.ns &
   pid=$!
   echo $pid
 
@@ -66,20 +68,22 @@ do
   echo "# Preparing Database..."
   curl -X GET $LOAD_URL
 
+  silentCountDown 5
+
   kill -9 $pid
 
   #wait for server to start
   silentCountDown 5
 
   echo "# Starting Acme-Air"
-  $SOMNS_EXEC -JXmx5g ./../../../app.ns >> AT_$i.log &
+  $SOMNS_EXEC -JXmx5g ./../../../app.ns &
   pid=$!
   echo $pid
 
   silentCountDown 10
 
   echo "# Starting JMeter..."
-  args=" -n -t AcmeAir.jmx -JNUM_THREAD=$THREADS -JLOOP_COUNT=$LOOPCOUNT -DusePureIDs=true -j logs/AcmeAir$1.log -l logs/AcmeAir$i.jtl"
+  args=" -n -t AcmeAir.jmx -JNUM_THREAD=$THREADS -JLOOP_COUNT=$LOOPCOUNT -DusePureIDs=true -j logs/AcmeAir_UT$1.log -l logs/AcmeAir_UT$i.jtl"
   bash ./../../../jmeter/bin/jmeter $args
 
   echo "# Killing AcmeAir"
